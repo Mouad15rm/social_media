@@ -6,6 +6,8 @@ const morgan = require('morgan');
 const mongoose = require('mongoose'); 
 const app = express(); 
 const PORT = process.env.PORT || 5000; 
+const authRoutes = require("./routes/authRoutes"); 
+app.use("/api/auth", authRoutes) 
 // Connexion à MongoDB 
 mongoose.connect(process.env.MONGO_URI) 
 .then(() => console.log(' MongoDB connecté')) 
