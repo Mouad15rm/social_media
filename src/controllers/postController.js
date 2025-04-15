@@ -72,3 +72,17 @@ res.json(posts);
 res.status(500).json({ error: 'Erreur serveur' }); 
 } 
 }; 
+exports.getAllPosts = async (_req, res) => { 
+    try { 
+    const posts = await Post.find() 
+    .populate('author', 'username avatar') 
+    .populate({ 
+    path: 'comments', 
+    populate: { path: 'author', select: 'username avatar' } 
+    })             
+    .sort({ createdAt: -1 }); 
+    res.json(posts); 
+    } catch (error) { 
+    res.status(500).json({ error: 'Erreur serveur' }); 
+    } 
+    }; 

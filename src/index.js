@@ -32,6 +32,9 @@ app.use('/api/posts', postRoutes);
 app.get('/', (req, res) => {
     res.send('Bienvenue sur l’API du réseau social !');
 });
+const commentRoutes = require('./routes/commentRoutes') 
+app.use('/api/comments', commentRoutes);
+
 // Start server
 app.listen(PORT, () => console.log(` Serveur démarré sur le port ${PORT}`));
 
