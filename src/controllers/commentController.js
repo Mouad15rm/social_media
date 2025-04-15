@@ -35,7 +35,8 @@ exports.deleteComment = async (req, res) => {
         if (!comment) return res.status(404).json({ error: 'Commentaire introuvable' 
 }); 
  
-        if (comment.author.toString() !== userId) return res.status(403).json({ error: 'Action non autorisée' }); 
+        if (comment.author.toString() !== userId) return res.status(403).json({ error: 
+'Action non autorisée' }); 
  
         await comment.deleteOne(); 
         res.json({ message: 'Commentaire supprimé avec succès' }); 

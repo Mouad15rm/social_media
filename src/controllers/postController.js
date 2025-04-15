@@ -98,3 +98,29 @@ exports.getUserPosts = async (req, res) => {
         res.status(500).json({ error: 'Erreur serveur' }); 
     } 
 }; 
+const User = require('../models/User'); 
+ 
+exports.getFeed = async (req, res) => { 
+    try { 
+        const userId = req.user.userId; 
+ 
+        // Récupérer l'utilisateur et la liste des utilisateurs qu'il suit 
+        const user = await User.findById(userId); 
+        if (!user) return res.status(404).json({ error: 'Utilisateur introuvable' }); 
+ 
+        // Récupérer les posts des utilisateurs suivis + les siens 
+        const posts = await Post.find({ 
+            author: { $in: [...user.following, userId] } 
+        }) 
+            .populate('author', 'username avatar') 
+            .populate({ 
+                path: 'comments', 
+                populate: { path: 'author', select: 'username avatar' } 
+            }) 
+            .sort({ createdAt: -1 }); // Trier du plus récent au plus ancien 
+ 
+        res.json(posts); 
+    } catch (error) { 
+        res.status(500).json({ error: 'Erreur serveur' }); 
+    } 
+};
