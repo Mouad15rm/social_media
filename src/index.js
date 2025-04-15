@@ -34,7 +34,8 @@ app.get('/', (req, res) => {
 });
 const commentRoutes = require('./routes/commentRoutes') 
 app.use('/api/comments', commentRoutes);
-
+const userRoutes = require('./routes/userRoutes') 
+app.use('/api/users', userRoutes); 
 // Start server
 app.listen(PORT, () => console.log(` Serveur démarré sur le port ${PORT}`));
 
