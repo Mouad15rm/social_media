@@ -4,9 +4,10 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
-const authRoutes = require('./routes/authRoutes');
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
+const authRoutes = require('./routes/authRoutes');
+ 
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
@@ -21,10 +22,16 @@ app.use(cors());
 app.use(helmet());
 app.use(morgan('dev'));
 // Routes
+
 app.use('/api/auth', authRoutes);
 // Test route
+
+const postRoutes = require('./routes/postRoutes');  
+app.use('/api/posts', postRoutes);
+
 app.get('/', (req, res) => {
     res.send('Bienvenue sur l’API du réseau social !');
 });
 // Start server
 app.listen(PORT, () => console.log(` Serveur démarré sur le port ${PORT}`));
+
