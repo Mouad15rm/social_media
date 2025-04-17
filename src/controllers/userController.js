@@ -130,13 +130,11 @@ exports.getRecentActivity = async (req, res) => {
             .limit(10) 
             .populate('author', 'username avatar') 
             .populate('post', 'content'); 
- 
         // Fetch recent follows 
         const follows = await User.find({ _id: { $in: followingIds } }) 
             .sort({ createdAt: -1 }) 
             .limit(10) 
             .populate('followers', 'username avatar'); 
- 
         // Fetch recent mentions (if any user was tagged in a post) 
         const mentions = await Post.find({ 
             content: new RegExp(`@${user.username}`, 'i') 
@@ -144,7 +142,6 @@ exports.getRecentActivity = async (req, res) => {
             .sort({ createdAt: -1 }) 
             .limit(10) 
             .populate('author', 'username avatar'); 
- 
         // Format the activities 
         const activities = [ 
             ...posts.map(post => ({ 
@@ -156,26 +153,22 @@ exports.getRecentActivity = async (req, res) => {
                 _id: `${post._id}-${likeUser._id}`, type: 'like', 
                 author: likeUser, 
                 post: { content: post.content }, createdAt: post.updatedAt, 
-            })) 
-            ), 
+            }))), 
             ...comments.map(comment => ({ 
                 _id: comment._id, type: 'comment', 
                 author: comment.author, 
                 post: { content: comment.post.content }, createdAt: comment.createdAt, 
             })), 
             ...follows.flatMap(user => user.followers.map(follower => ({ 
- 
                 _id: `${user._id}-${follower._id}`, type: 'follow', 
                 author: follower, createdAt: user.createdAt, 
-            })) 
-            ), 
+            }))), 
             ...mentions.map(post => ({ 
                 _id: post._id, type: 'mention', 
                 author: post.author, 
                 post: { content: post.content }, createdAt: post.createdAt, 
             })), 
         ].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // Sort by newest first 
- 
         res.json(activities); 
     } catch (error) { 
 console.error(error); 

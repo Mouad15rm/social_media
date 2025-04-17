@@ -1,6 +1,5 @@
 const Post = require("../models/Post"); 
 const User = require("../models/User"); 
- 
 exports.search = async (req, res) => { 
     try { 
         const { q } = req.query; 
