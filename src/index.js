@@ -25,10 +25,15 @@ app.use(cors());
 app.use(helmet());
 app.use(morgan("dev"));
 
-app.use("/api/auth", authRoutes)
+const searchRoutes = require("./routes/searchRoutes"); 
+
+app.use("/api/auth", authRoutes);
+app.use("/api/search", searchRoutes) ;
 app.use('/api/posts', postRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api/users', userRoutes);
+ 
+
 
 app.get("/", (req, res) => {
   res.send("Bienvenue sur l'API du réseau social !");
